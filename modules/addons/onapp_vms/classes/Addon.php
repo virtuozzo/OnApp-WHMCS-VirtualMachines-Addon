@@ -174,10 +174,6 @@ class OnApp_VMs_Addon {
 		$product = $this->product;
 		$errors = array();
 
-		//check hostname
-		if( $vm[ '_hostname' ] != $product[ 'domain' ] ) {
-			$errors[ 'Hostname' ] = array( $vm[ '_hostname' ] => $product[ 'domain' ] );
-		}
 		//check RAM
 		if( $vm[ '_memory' ] != $product[ 'configoption3' ] ) {
 			$errors[ 'RAM' ] = array( $vm[ '_memory' ] => $product[ 'configoption3' ] );
@@ -206,10 +202,7 @@ class OnApp_VMs_Addon {
 	private function map( ) {
 		insert_query( 'tblonappservices', array(
 												  'service_id' => $_GET[ 'service_id' ],
-												  'vm_id' => $_GET[ 'vm_id' ],
-//												  'onapp_user_id' => $_GET[ 'onapp_user_id' ],
-//												  'password' => encrypt( $whmcsuser[ 'password' ] ),
-//												  'email' => $user->_obj->_login
+												  'vm_id' => $_GET[ 'vm_id' ]
 											 ) );
 
 		$this->smarty->assign( 'msg', true );
