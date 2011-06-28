@@ -1,4 +1,4 @@
-{include file='topnav.tpl'}
+{include file='vm_topnav.tpl'}
 
 <form action="" method="post" id="blockops">
 	<div class="tablebg">

@@ -40,7 +40,7 @@
 </div>
 
 <br/>
-{include file='topnav.tpl'}
+{include file='vm_topnav.tpl'}
 
 <table width="100%" cellspacing="1" cellpadding="3" border="0" class="datatable">
 	<tr>

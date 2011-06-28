@@ -15,9 +15,9 @@
 {/if}
 
 {if $map}
-	{include file='map.tpl'}
+	{include file='vm_map.tpl'}
 {elseif $info}
-	{include file='info.tpl'}
+	{include file='vm_info.tpl'}
 {else}
-	{include file='main.tpl'}
+	{include file='vm_main.tpl'}
 {/if}

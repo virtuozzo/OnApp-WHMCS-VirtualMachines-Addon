@@ -57,7 +57,7 @@ class OnApp_VMs_Addon {
 		return $this->servers;
 	}
 
-	public function getUsersFromWHMCS( $id ) {
+	public function getUsersFromWHMCS( $id = false ) {
 		$sql = 'SELECT SQL_CALC_FOUND_ROWS whmcs.*, onapp.email as mail, onapp.client_id, onapp.server_id, onapp.onapp_user_id'
 			   . ' FROM `tblclients` AS whmcs LEFT JOIN `tblonappclients` AS onapp ON whmcs.`id` = onapp.`client_id`'
 			   . ' WHERE onapp.`server_id` = ' . $_GET[ 'server_id' ]

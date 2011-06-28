@@ -59,7 +59,7 @@
 </div>
 
 <br/>
-{include file='topnav.tpl'}
+{include file='vm_topnav.tpl'}
 
 <table width="100%" cellspacing="1" cellpadding="3" border="0" class="datatable">
 	<tr>
@@ -103,6 +103,7 @@
 					{/foreach}
 					{/foreach}
 					</table>
+					<a href="{$BASE}&service_id={$product.id}&vm_id={$vm._id}&whmcs_user_id={$whmcs_user.id}&action=domap">{$LANG.Map} anyway</a>
 				{/if}
 			</td>
 		</tr>
