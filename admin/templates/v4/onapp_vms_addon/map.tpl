@@ -89,20 +89,16 @@
 				{if $vm.resource_errors eq false}
 					<a href="{$BASE}&service_id={$product.id}&vm_id={$vm._id}&whmcs_user_id={$whmcs_user.id}&action=domap">{$LANG.Map}</a>
 				{else}
-					Resources are not identical:
-					<table>
-						<tr>
-							<td width="50%">OnApp</td>
-							<td>WHMCS</td>
-						</tr>
+					<span style="color: red; font-weight: bold;">Resources are not identical:</span>
+					<table cellpadding="5">
 					{foreach from=$vm.resource_errors key=K item=i}
 						<tr>
-							<td colspan="2">{$K}</td>
+							<td colspan="2"><b>{$K}</b></td>
 						</tr>
 					{foreach from=$i key=k item=v}
 						<tr>
-							<td>{$k}</td>
-							<td>{$v}</td>
+							<td width="50%">OnApp: {$k}</td>
+							<td>WHMCS: {$v}</td>
 						</tr>
 					{/foreach}
 					{/foreach}

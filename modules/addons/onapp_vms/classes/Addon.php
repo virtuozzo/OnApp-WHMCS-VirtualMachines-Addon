@@ -141,7 +141,7 @@ class OnApp_VMs_Addon {
 				$ips[] = $ip->_address;
 			}
 			$tmp[ '_ip_addresses' ] = implode( '<br/>', $ips );
-			$tmp[ 'resource_errors' ] = $this->checkResources( $tmp );
+			$tmp[ 'resource_errors' ] = $this->checkResources( $tmp, $server );
 
 			$results[ 'data' ][ ] = $tmp;
 		}
@@ -170,9 +170,29 @@ class OnApp_VMs_Addon {
 		return mysql_fetch_assoc( $res );
 	}
 
-	private function checkResources( $vm ) {
+	private function checkResources( $vm, &$server ) {
 		$product = $this->product;
 		$errors = array();
+
+		$class = $this->getOnAppObject( 'ONAPP_Disk', $server[ 'address' ], $server[ 'username' ], $server[ 'password' ] );
+		$disks = $class->getList( $vm[ '_id' ] );
+
+		//check disks
+		foreach( $disks as $disk ) {
+			if( $disk->_primary === 'true' ) {
+				if( $disk->_disk_size != $product[ 'configoption11' ] ) {
+					$errors[ 'Primary disk' ] = array( $disk->_disk_size => $product[ 'configoption11' ] );
+				}
+			}
+			elseif( $disk->_is_swap === 'true' ){
+				if( $disk->_disk_size != $product[ 'configoption9' ] ) {
+					$errors[ 'SWAP disk' ] = array( $disk->_disk_size => $product[ 'configoption9' ] );
+				}
+			}
+			else {
+				continue;
+			}
+		}
 
 		//check RAM
 		if( $vm[ '_memory' ] != $product[ 'configoption3' ] ) {
