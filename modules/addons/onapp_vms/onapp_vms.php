@@ -1,9 +1,8 @@
 <?php
 //todo extract GET parameters
-include_once 'classes/Addon.php';
-
-//error_reporting(E_ALL);
-//ini_set('display_errors', 'On');
+require_once 'classes/Addon.php';
+require_once 'wrapper/OnAppInit.php';
+require_once ROOTDIR . '/modules/servers/onapp/lib.php';
 
 function onapp_vms_output( $vars ) {
 	global $templates_compiledir, $customadminpath;
