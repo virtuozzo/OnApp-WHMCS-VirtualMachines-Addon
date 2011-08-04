@@ -2,7 +2,6 @@
 //todo extract GET parameters
 require_once 'classes/Addon.php';
 require_once 'wrapper/OnAppInit.php';
-require_once ROOTDIR . '/modules/servers/onapp/lib.php';
 
 function onapp_vms_output( $vars ) {
 	global $templates_compiledir, $customadminpath;

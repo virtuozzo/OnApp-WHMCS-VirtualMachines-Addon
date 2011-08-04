@@ -13,8 +13,11 @@ class OnApp_VMs_Addon {
 		$this->lang = $smarty->get_template_vars( 'LANG' );
 
 		$this->smarty->assign( 'onapp_servers', $this->getServers( ) );
-		$server = current( $this->servers );
-		$smarty->assign( 'server_id', $_GET[ 'server_id' ] = $server[ 'id' ] );
+		if( !isset( $_GET[ 'server_id' ] ) || empty( $_GET[ 'server_id' ] ) ) {
+			$server = current( $this->servers );
+			$_GET[ 'server_id' ] = $server[ 'id' ];
+		}
+		$smarty->assign( 'server_id', $_GET[ 'server_id' ] );
 
 		switch( $_GET[ 'action' ] ) {
 			case 'info':
@@ -44,7 +47,7 @@ class OnApp_VMs_Addon {
 
 	public function getServers( ) {
 		$sql = 'SELECT `id`, `name`, `ipaddress`, `hostname`, `username`, `password`'
-			   . ' FROM `tblservers` WHERE `type` = "onapp"';
+			   . ' FROM `tblservers` WHERE `type` = "onapp" OR `type` = "onappusers"';
 
 		$res = full_query( $sql );
 
@@ -134,12 +137,12 @@ class OnApp_VMs_Addon {
 			}
 
 			$ips = array();
-			$tmp = (array)$vms[ $this->offset + $i ];
-			foreach( $tmp[ '_ip_addresses' ] as $ip ) {
+			$tmp = $vms[ $this->offset + $i ];
+			foreach( $tmp->_ip_addresses as $ip ) {
 				$ips[] = $ip->_address;
 			}
-			$tmp[ '_ip_addresses' ] = implode( '<br/>', $ips );
-			$tmp[ 'resource_errors' ] = $this->checkResources( $tmp, $server );
+			$tmp->_ip_addresses = implode( '<br/>', $ips );
+			$tmp->resource_errors = $this->checkResources( $tmp, $server );
 
 			$results[ 'data' ][ ] = $tmp;
 		}
@@ -173,7 +176,7 @@ class OnApp_VMs_Addon {
 		$errors = array();
 
 		$class = $this->getOnAppObject( 'ONAPP_Disk', $server[ 'address' ], $server[ 'username' ], $server[ 'password' ] );
-		$disks = $class->getList( $vm[ '_id' ] );
+		$disks = $class->getList( $vm->_id );
 
 		//check disks
 		foreach( $disks as $disk ) {
@@ -193,20 +196,20 @@ class OnApp_VMs_Addon {
 		}
 
 		//check RAM
-		if( $vm[ '_memory' ] != $product[ 'configoption3' ] ) {
-			$errors[ 'RAM' ] = array( $vm[ '_memory' ] => $product[ 'configoption3' ] );
+		if( $vm->_memory != $product[ 'configoption3' ] ) {
+			$errors[ 'RAM' ] = array( $vm->_memory => $product[ 'configoption3' ] );
 		}
 		//check CPU Priority
-		if( $vm[ '_cpu_shares' ] != $product[ 'configoption7' ] ) {
-			$errors[ 'CPU Priority' ] = array( $vm[ '_cpu_shares' ] => $product[ 'configoption7' ] );
+		if( $vm->_cpu_shares != $product[ 'configoption7' ] ) {
+			$errors[ 'CPU Priority' ] = array( $vm->_cpu_shares => $product[ 'configoption7' ] );
 		}
 		//check CPU Cores
-		if( $vm[ '_cpus' ] != $product[ 'configoption5' ] ) {
-			$errors[ 'CPU Cores' ] = array( $vm[ '_cpus' ] => $product[ 'configoption5' ] );
+		if( $vm->_cpus != $product[ 'configoption5' ] ) {
+			$errors[ 'CPU Cores' ] = array( $vm->_cpus => $product[ 'configoption5' ] );
 		}
 		//check Template
-		if( $vm[ '_template_id' ] != $product[ 'os' ] ) {
-			$errors[ 'Template' ] = array( $vm[ '_template_label' ] => $product[ 'configoptions' ][ 33 ][ 'options' ][ $product[ 'os' ] ][ 'name' ] );
+		if( $vm->_template_id != $product[ 'os' ] ) {
+			$errors[ 'Template' ] = array( $vm->_template_id => $product[ 'configoptions' ][ 33 ][ 'options' ][ $product[ 'os' ] ][ 'name' ] );
 		}
 
 		if( empty( $errors ) ) {
@@ -219,9 +222,10 @@ class OnApp_VMs_Addon {
 
 	private function map( ) {
 		insert_query( 'tblonappservices', array(
-												  'service_id' => $_GET[ 'service_id' ],
-												  'vm_id' => $_GET[ 'vm_id' ]
-											 ) );
+				'service_id' => $_GET[ 'service_id' ],
+				'vm_id' => $_GET[ 'vm_id' ]
+			)
+		);
 
 		$this->smarty->assign( 'msg', true );
 		$this->smarty->assign( 'msg_text', $this->lang[ 'MapedSuccessfully' ] );
@@ -255,4 +259,196 @@ class OnApp_VMs_Addon {
 
 		return $obj;
 	}
+}
+
+function get_service($service_id) {
+    $select_service = "SELECT
+        tblproducts.id as productid,
+        tblhosting.id as id,
+        userid,
+        tblproducts.configoption1 as serverid,
+        tblonappservices.vm_id as vmid,
+        tblhosting.password,
+        tblhosting.domain as domain,
+        tblhosting.orderid as orderid,
+        tblproducts.name as product,
+        tblproducts.configoptionsupgrade,
+        tblproducts.configoption1,
+        tblproducts.configoption2,
+        tblproducts.configoption3,
+        tblproducts.configoption4,
+        tblproducts.configoption5,
+        tblproducts.configoption6,
+        tblproducts.configoption7,
+        tblproducts.configoption8,
+        tblproducts.configoption9,
+        tblproducts.configoption10,
+        tblproducts.configoption11,
+        tblproducts.configoption12,
+        tblproducts.configoption13,
+        tblproducts.configoption14,
+        tblproducts.configoption15,
+        tblproducts.configoption16,
+        tblproducts.configoption17,
+        tblproducts.configoption18,
+        tblproducts.configoption19,
+        tblproducts.configoption20,
+        0 as additionalram,
+        0 as additionalcpus,
+        0 as additionalcpushares,
+        0 as additionaldisksize,
+        0 as additionalips,
+        0 as additionalportspead
+    FROM
+        tblhosting
+        LEFT JOIN tblproducts ON tblproducts.id = packageid
+        LEFT JOIN tblonappservices ON service_id = tblhosting.id
+    WHERE
+        servertype = 'onapp'
+        AND tblhosting.id = '$service_id'
+        AND tblhosting.domainstatus = 'Active'";
+
+    $service_rows = full_query($select_service);
+
+    if ( ! $service_rows )
+        return false;
+
+    $service = mysql_fetch_assoc( $service_rows );
+
+    $productid =  $service["productid"];
+
+    $select_config ="
+    SELECT
+        optionssub.id,
+        optionssub.optionname,
+        sub.configid,
+        tblproductconfigoptions.optionname as configoptionname,
+        tblproductconfigoptions.optiontype,
+        tblproductconfigoptions.qtymaximum AS max,
+        tblproductconfigoptions.qtyminimum AS min,
+        options.qty,
+        optionssub.sortorder,
+        options.optionid as active
+    FROM
+        tblhostingconfigoptions AS options
+        LEFT JOIN tblproductconfigoptionssub AS sub
+            ON options.configid = sub.configid
+            AND optionid = sub.id
+        LEFT JOIN tblproductconfigoptions
+            ON tblproductconfigoptions.id = options.configid
+        LEFT JOIN tblproductconfigoptionssub AS optionssub
+            ON optionssub.configid = tblproductconfigoptions.id
+    WHERE
+        relid = '$service_id'
+    ORDER BY optionssub.id ASC;";
+
+    $select_config = "
+    SELECT
+        optionssub.id,
+        optionssub.optionname,
+        tblproductconfigoptions.id as configid,
+        tblproductconfigoptions.optionname as configoptionname,
+        tblproductconfigoptions.optiontype,
+        tblproductconfigoptions.qtymaximum AS max,
+        tblproductconfigoptions.qtyminimum AS min,
+        options.qty,
+        optionssub.sortorder,
+        IF(options.optionid, options.optionid, optionssub.id) as active
+    FROM
+        tblproductconfiglinks
+        LEFT JOIN tblproductconfigoptions
+            ON tblproductconfigoptions.gid = tblproductconfiglinks.gid
+        LEFT JOIN tblhostingconfigoptions AS options
+            ON options.configid = tblproductconfigoptions.id AND relid = $service_id
+        LEFT JOIN tblproductconfigoptionssub AS sub
+            ON options.configid = sub.configid
+            AND optionid = sub.id
+        LEFT JOIN tblproductconfigoptionssub AS optionssub
+            ON optionssub.configid = tblproductconfigoptions.id
+    WHERE
+        tblproductconfiglinks.pid = $productid
+    ORDER BY optionssub.id ASC;";
+    $config_rows = full_query($select_config);
+
+    if ( ! $config_rows )
+        return false;
+
+    $onappconfigoptions = array(
+        $service["configoption12"], // additional ram
+        $service["configoption13"], // additional cpus
+        $service["configoption14"], // additional cpu shares
+        $service["configoption15"], // additional disk size
+        $service["configoption16"], // additional ips
+        $service["configoption19"], // operation system
+        $service["configoption20"]  // port spead
+    );
+
+    $service["configoptions"] = array();
+
+    while ( $row = mysql_fetch_assoc($config_rows) )
+        if ( in_array($row["configid"], $onappconfigoptions ) ) {
+            switch ( $row['optiontype'] ) {
+                case '1': // Dropdown
+                    $row['order'] = $row['sortorder'];
+                    break;
+                case '2': // Radio
+                    $row['order'] = $row['sortorder'];
+                    break;
+                case '3': // Yes/No
+                    $row['order'] = 0;
+                    break;
+                case '4': // Quantity
+                    $row['order'] = $row['qty'] * $row['sortorder'];
+                    break;
+            };
+
+            if(!isset($service["configoptions"][$row['configid']]))
+                $service["configoptions"][$row['configid']] = array(
+                    'name'       => $row['configoptionname'],
+                    'active'     => $row['active'],
+                    'optiontype' => $row['optiontype'],
+                    'sortorder'  => $row['sortorder']
+                );
+
+            if ( $row["id"] == $row["active"]) {
+                if ($service["configoption12"] == $row["configid"]) {
+                    $service["additionalram"] = $row["order"];
+                    $service["configoptions"][$row['configid']]['order'] = $service['configoption3'];
+                    $service["configoptions"][$row['configid']]['prefix'] = 'MB';
+                } elseif ($service["configoption13"] == $row["configid"]) {
+                    $service["additionalcpus"] = $row["order"];
+                    $service["configoptions"][$row['configid']]['order'] = $service['configoption5'];
+                    $service["configoptions"][$row['configid']]['prefix'] = '';
+                } elseif ($service["configoption14"] == $row["configid"]) {
+                    $service["additionalcpushares"] = $row["order"];
+                    $service["configoptions"][$row['configid']]['order'] = $service['configoption7'];
+                    $service["configoptions"][$row['configid']]['prefix'] = '%';
+                } elseif ($service["configoption15"] == $row["configid"]) {
+                    $service["additionaldisksize"] = $row["order"];
+                    $service["configoptions"][$row['configid']]['order'] = $service['configoption11'];
+                    $service["configoptions"][$row['configid']]['prefix'] = 'GB';
+                } elseif ($service["configoption16"] == $row["configid"]) {
+                    $service["additionalips"] = $row["order"];
+                    $service["configoptions"][$row['configid']]['order'] = $service['configoption18'];
+                    $service["configoptions"][$row['configid']]['prefix'] = '';
+                } elseif ($service["configoption20"] == $row["configid"]) {
+                    $service["additionalportspead"] = $row["order"];
+                    $service["configoptions"][$row['configid']]['order'] = $service['configoption8'];
+                    $service["configoptions"][$row['configid']]['prefix'] = 'Mbps';
+                } elseif ($service["configoption19"] == $row["configid"]) {
+                    $service["os"] = $row["order"];
+                };
+
+                $service["configoptions"][$row['configid']]['value'] = $row['qty'];
+            };
+
+            $service["configoptions"][$row['configid']]['options'][$row['sortorder']] = array(
+                'id'   => $row['id'],
+                'name' => $row['optionname'],
+                'max'  => $row['max'],
+                'min'  => $row['min']
+            );
+
+        };
+    return $service;
 }

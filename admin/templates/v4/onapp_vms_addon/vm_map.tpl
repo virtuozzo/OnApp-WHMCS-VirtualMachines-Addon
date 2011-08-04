@@ -72,26 +72,26 @@
 	</tr>
 	{foreach from=$onapp_vms item=vm}
 		<tr>
-			<td{$bg}>{$vm._label}</td>
-			<td{$bg}>{$vm._ip_addresses}</td>
-			<td{$bg}>{$vm._total_disk_size}</td>
-			<td{$bg}>{$vm._memory}</td>
+			<td{$bg}>{$vm->_label}</td>
+			<td{$bg}>{$vm->_ip_addresses}</td>
+			<td{$bg}>{$vm->_total_disk_size}</td>
+			<td{$bg}>{$vm->_memory}</td>
 			<td{$bg}>
-				{if $vm._locked eq "true" || $vm._built eq "false" }
+				{if $vm->_locked eq "true" || $vm->_built eq "false" }
     				Pending
-				{elseif $vm._booted eq "true"}
+				{elseif $vm->_booted eq "true"}
        				ON
-				{elseif $vm._booted eq "false"}
+				{elseif $vm->_booted eq "false"}
 					OFF
 				{/if}
 			</td>
 			<td{$bg}>
-				{if $vm.resource_errors eq false}
-					<a href="{$BASE}&service_id={$product.id}&vm_id={$vm._id}&whmcs_user_id={$whmcs_user.id}&action=domap">{$LANG.Map}</a>
+				{if $vm->resource_errors eq false}
+					<a href="{$BASE}&service_id={$product.id}&vm_id={$vm->_id}&whmcs_user_id={$whmcs_user.id}&action=domap">{$LANG.Map}</a>
 				{else}
 					<span style="color: red; font-weight: bold;">Resources are not identical:</span>
 					<table cellpadding="5">
-					{foreach from=$vm.resource_errors key=K item=i}
+					{foreach from=$vm->resource_errors key=K item=i}
 						<tr>
 							<td colspan="2"><b>{$K}</b></td>
 						</tr>
@@ -103,7 +103,7 @@
 					{/foreach}
 					{/foreach}
 					</table>
-					<a href="{$BASE}&service_id={$product.id}&vm_id={$vm._id}&whmcs_user_id={$whmcs_user.id}&action=domap">{$LANG.Map} anyway</a>
+					<a href="{$BASE}&service_id={$product.id}&vm_id={$vm->_id}&whmcs_user_id={$whmcs_user.id}&action=domap">{$LANG.Map} anyway</a>
 				{/if}
 			</td>
 		</tr>

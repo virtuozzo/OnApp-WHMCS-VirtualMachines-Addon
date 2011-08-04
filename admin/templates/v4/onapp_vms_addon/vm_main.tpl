@@ -1,3 +1,17 @@
+<table cellspacing="2" cellpadding="3" border="0" width="100%" class="form">
+	<tr>
+		<td class="fieldlabel">
+			{$LANG.Server}
+			<select name="server" class="mapserver">
+				{foreach from=$onapp_servers key=id item=server}
+					<option value="{$id}">{$server.name} | {$server.ipaddress}</option>
+				{/foreach}
+			</select>
+		</td>
+	</tr>
+</table>
+
+<br/>
 {include file='vm_topnav.tpl'}
 
 <form action="" method="post" id="blockops">
