@@ -36,7 +36,7 @@ function onapp_vms_output( $vars ) {
         if ( ! file_exists( ONAPP_WRAPPER_INIT ) ){
             $smarty->assign('msg', '1');
             $smarty->assign('msg_text',
-                    'Wrapper not found. Please put it into '.
+                    'Wrapper not found. Please, take the freshest Wrapper from http://onapp.com/downloads put it into '.
                     ' ' . realpath( ROOTDIR ) . '/includes'
             );
         }
