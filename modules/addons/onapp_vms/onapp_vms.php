@@ -39,7 +39,6 @@ function onapp_vms_output( $vars ) {
                     'Wrapper not found. Please put it into '.
                     ' ' . realpath( ROOTDIR ) . '/includes'
             );
-            $smarty->fetch( $smarty->template_dir . 'onapp_vms_error.tpl' );
         }
 	elseif( isset( $_GET[ 'action' ] ) && ( $_GET[ 'action' ] == 'info' ) ) {
 		$data = $module->getUserData( $_GET[ 'whmcs_user_id' ] );
