@@ -1,7 +1,13 @@
 <?php
+
 //todo extract GET parameters
 require_once 'classes/Addon.php';
-require_once dirname( __FILE__ ) . '/../../servers/onapp/wrapper/OnAppInit.php';
+
+if ( ! defined('ONAPP_WRAPPER_INIT') )
+    define('ONAPP_WRAPPER_INIT', ROOTDIR . '/includes/wrapper/OnAppInit.php');
+
+if ( file_exists( ONAPP_WRAPPER_INIT ) )
+    require_once ONAPP_WRAPPER_INIT;
 
 function onapp_vms_output( $vars ) {
 	global $templates_compiledir, $customadminpath;
@@ -27,7 +33,15 @@ function onapp_vms_output( $vars ) {
 
 	$module = new OnApp_VMs_Addon( $smarty );
 
-	if( isset( $_GET[ 'action' ] ) && ( $_GET[ 'action' ] == 'info' ) ) {
+        if ( ! file_exists( ONAPP_WRAPPER_INIT ) ){
+            $smarty->assign('msg', '1');
+            $smarty->assign('msg_text',
+                    'Wrapper not found. Please put it into '.
+                    ' ' . realpath( ROOTDIR ) . '/includes'
+            );
+            $smarty->fetch( $smarty->template_dir . 'onapp_vms_error.tpl' );
+        }
+	elseif( isset( $_GET[ 'action' ] ) && ( $_GET[ 'action' ] == 'info' ) ) {
 		$data = $module->getUserData( $_GET[ 'whmcs_user_id' ] );
 		$smarty->assign( 'whmcs_user', $data[ 'data' ] );
 
