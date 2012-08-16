@@ -47,7 +47,7 @@ class OnApp_VMs_Addon {
 
 	public function getServers( ) {
 		$sql = 'SELECT `id`, `name`, `ipaddress`, `hostname`, `username`, `password`'
-			   . ' FROM `tblservers` WHERE `type` = "onapp" OR `type` = "onappusers"';
+			   . ' FROM `tblservers` WHERE `type` = "onapp"';
 
 		$res = full_query( $sql );
 
