@@ -32,7 +32,9 @@ class OnApp_VMs_Addon {
 				$smarty->assign( 'info', true );
 				$this->map( );
 				break;
-
+            case 'clean':
+                $this->cleanUnusedMapping();
+                break;
 			case 'unmap': //todo
 				$this->unmap( );
 				break;
@@ -57,6 +59,19 @@ class OnApp_VMs_Addon {
 
 		return $this->servers;
 	}
+    
+    private function cleanUnusedMapping() {
+        $sql = "DELETE FROM tblonappservices WHERE service_id NOT IN ( SELECT id FROM tblhosting )";
+        $res = full_query( $sql );
+        
+        if( $res &&  mysql_affected_rows() > 0 ){
+            $this->smarty->assign('msg_success', sprintf( $this->lang['CleanSuccess'], mysql_affected_rows() ) );
+        } elseif( $res && mysql_affected_rows() < 1 ) {
+            $this->smarty->assign('msg_success', $this->lang['NothingToClean'] );
+        } else {
+            $this->smarty->assign('msg_error', sprintf( $this->lang['CleanFailed'], mysql_error() ) );
+        }
+    }
 
 	public function getUsersFromWHMCS( $id = false ) {
 		$sql = 'SELECT SQL_CALC_FOUND_ROWS whmcs.*, onapp.email as mail, onapp.client_id, onapp.server_id, onapp.onapp_user_id'

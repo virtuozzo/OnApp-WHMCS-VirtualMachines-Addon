@@ -60,10 +60,14 @@ $_ADDONLANG[ 'AuthSyncedSuccessfully' ] = 'Login and Password are now identical'
 $_ADDONLANG[ 'AuthSyncedError' ] = 'There was error during authentication synchronization: ';
 $_ADDONLANG[ 'BlockOpsSuccessfully' ] = 'Operations were performed successfully';
 $_ADDONLANG[ 'BlockOpsError' ] = 'There were some errors during performing operations';
-$_ADDONLANG[ 'BlockListOfWHMCSUsers' ] = 'This is the list of WHMCS users which are maped to onapp users on the current server. Click "view" link to see the list of WHMCS products/services of this user for current server.';
+$_ADDONLANG[ 'BlockListOfWHMCSUsers' ] = 'This is the list of WHMCS users which are maped to onapp users on the current server. Click "view" link to see the list of WHMCS products/services of this user for current server. Click "Clean Unused Mapping" button in order to delete unused mapping for deleted hostings.';
 $_ADDONLANG[ 'BlockListOfWHMCSProducts' ] = 'This is the list of WHMCS products/services ( only unmapped products/services, once you map them they will not be in this list anymore ) for current user on the server - <b>%s | %s</b>';
 $_ADDONLANG[ 'BlockMapVM' ] = 
 'The first frame contains WHMCS User details. The second frame shows  details of the WHMCS product/service you are about to map to one of OnApp VMs by clicking "map" / "map anyway" link. Next is the list of this user\'s OnApp VMs available for mapping on the server <b>%s | %s</b> ';
+$_ADDONLANG[ 'CleanUnusedMapping' ] = 'Clean Unused Mapping';
+$_ADDONLANG[ 'CleanSuccess' ] = 'Unused mapping clean successfull ( affected rows ( %s ) )';
+$_ADDONLANG[ 'NothingToClean' ] = 'No unused mapping in database';
+$_ADDONLANG[ 'CleanFailed' ] = 'Unused mapping clean failed ( %s )';
 
 $_ADDONLANG[ 'ID' ] = 'ID';
 

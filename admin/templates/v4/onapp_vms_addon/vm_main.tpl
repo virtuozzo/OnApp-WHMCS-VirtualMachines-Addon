@@ -51,3 +51,7 @@
 		<a href="{$BASE}&server_id={$server_id}&page={$next}">{$LANG.Next} {$LANG.Page} »</a>
 	{/if}
 </p>
+
+<form action="{$BASE}&action=clean" method="post">
+    <input type="submit" value="{$LANG.CleanUnusedMapping}" />
+</form>
