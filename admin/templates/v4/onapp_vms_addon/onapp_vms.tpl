@@ -5,15 +5,16 @@
 	var LANG = {$LANG.JSMessages};
 </script>
 
-{if $msg}
-	{if $msg_ok}
-		{assign var='class' value='infobox'}
-	{else}
-		{assign var='class' value='errorbox'}
-	{/if}
-	<div style="font-size: 18px;" class="{$class}">{$msg_text}</div>
+{if $msg_success}
+    <div class="successbox">{$msg_success}</div>
+{/if}    
+{if $msg_info}
+    <div class="infobox">{$msg_info}</div>
 {/if}
-
+{if $msg_error}
+    <div class="errorbox">{$msg_error}</div>
+{/if}
+	
 {if $map}
 	{include file='vm_map.tpl'}
 {elseif $info}

@@ -86,10 +86,11 @@ class OnApp_VMs_Addon {
 		return $results;
 	}
 
-	public function getUserVMsFromWHMCS( $id ) {
+	public function getUserVMsFromWHMCS( $id, $server_id ) {
 		$sql = 'SELECT SQL_CALC_FOUND_ROWS hosting.* FROM `tblhosting` AS hosting'
 			   . ' LEFT JOIN `tblproducts` AS products ON products.`id` = hosting.`packageid`'
 			   . ' WHERE hosting.`userid` = ' . $id
+               . ' AND hosting.server = '  . $server_id  
 			   . ' AND products.`servertype` = "onapp" AND hosting.`id` NOT IN ( SELECT service_id FROM tblonappservices )'
 			   . ' LIMIT ' . $this->limit . ' OFFSET ' . $this->offset;
 
@@ -227,14 +228,12 @@ class OnApp_VMs_Addon {
 			)
 		);
 
-		$this->smarty->assign( 'msg', true );
-		$this->smarty->assign( 'msg_text', $this->lang[ 'MapedSuccessfully' ] );
-		$this->smarty->assign( 'msg_ok', true );
+		$this->smarty->assign( 'msg_success', $this->lang[ 'MapedSuccessfully' ] );
 
 		$_GET[ 'action' ] = 'info';
 	}
 
-	private function getServerData( $server = null ) {
+	public function getServerData( $server = null ) {
 		if( is_null( $server ) ) {
 			$sql = 'SELECT `id`, `name`, `ipaddress`, `hostname`, `username`, `password`'
 				   . ' FROM `tblservers` WHERE `id` = ' . $_GET[ 'server_id' ];

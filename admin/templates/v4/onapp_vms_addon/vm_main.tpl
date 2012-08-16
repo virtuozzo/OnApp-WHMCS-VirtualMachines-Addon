@@ -34,7 +34,7 @@
 				<td{$bg}>{$user.email}</td>
 				<td{$bg}>{$user.status}</td>
 				<td{$bg}>
-					<a href="{$BASE}&whmcs_user_id={$user.client_id}&onapp_user_id={$user.onapp_user_id}&action=info">{$LANG.View}</a>
+					<a href="{$BASE}&server_id={$server_id}&whmcs_user_id={$user.client_id}&onapp_user_id={$user.onapp_user_id}&action=info">{$LANG.View}</a>
 				</td>
 			</tr>
 		{/foreach}

@@ -10,7 +10,7 @@ if ( file_exists( ONAPP_WRAPPER_INIT ) )
     require_once ONAPP_WRAPPER_INIT;
 
 function onapp_vms_output( $vars ) {
-	global $templates_compiledir, $customadminpath;
+	global $templates_compiledir, $customadminpath; 
 
 	include_once ROOTDIR . '/includes/smarty/Smarty.class.php';
 	$smarty = new Smarty( );
@@ -32,24 +32,31 @@ function onapp_vms_output( $vars ) {
 	$smarty->assign( 'BASE', $base_url );
 
 	$module = new OnApp_VMs_Addon( $smarty );
+    
+    if ( ! file_exists( ONAPP_WRAPPER_INIT ) ){
 
-        if ( ! file_exists( ONAPP_WRAPPER_INIT ) ){
-            $smarty->assign('msg', '1');
-            $smarty->assign('msg_text',
-                    'Wrapper not found. Please, take the freshest Wrapper from http://onapp.com/downloads put it into '.
-                    ' ' . realpath( ROOTDIR ) . '/includes'
-            );
-        }
+        $smarty->assign('msg_error',
+                'Wrapper not found. Please, take the freshest Wrapper from http://onapp.com/downloads put it into '.
+                ' ' . realpath( ROOTDIR ) . '/includes'
+        );
+    }
 	elseif( isset( $_GET[ 'action' ] ) && ( $_GET[ 'action' ] == 'info' ) ) {
+        
+        $server_info = $module->getServerData();
+        
 		$data = $module->getUserData( $_GET[ 'whmcs_user_id' ] );
 		$smarty->assign( 'whmcs_user', $data[ 'data' ] );
+        
+        $smarty->assign('msg_info', sprintf( $vars['_lang']['BlockListOfWHMCSProducts'], $server_info['name'], $server_info['address'] ) );
 
-		$data = $module->getUserVMsFromWHMCS( $_GET[ 'whmcs_user_id' ] );
+		$data = $module->getUserVMsFromWHMCS( $_GET[ 'whmcs_user_id' ], $_GET['server_id'] );
 		$smarty->assign( 'whmcs_user_products', $data[ 'data' ] );
 	}
 	elseif( isset( $_GET[ 'action' ] ) && ( $_GET[ 'action' ] == 'map' ) ) {
+        $server_info = $module->getServerData();
 		$data = $module->getUserData( $_GET[ 'whmcs_user_id' ] );
 		$smarty->assign( 'whmcs_user', $data[ 'data' ] );
+        $smarty->assign('msg_info', sprintf( $vars['_lang']['BlockMapVM'], $server_info['name'], $server_info['address'] ) );
 
 		$data = $module->getProductData( $_GET[ 'product_id' ] );
 		$smarty->assign( 'product', $data );
@@ -60,6 +67,7 @@ function onapp_vms_output( $vars ) {
 	else {
 		$data = $module->getUsersFromWHMCS( );
 		$smarty->assign( 'whmcs_users', $data[ 'data' ] );
+        $smarty->assign('msg_info', $vars['_lang'][ 'BlockListOfWHMCSUsers' ]);
 	}
 
 	$smarty->assign( 'pages', $data[ 'pages' ] );

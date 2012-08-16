@@ -47,10 +47,10 @@ $_ADDONLANG[ 'LoginToCP' ] = 'Login to CP';
 // messages
 $_ADDONLANG[ 'ActivatedSuccessfully' ] = 'User was activated successfully';
 $_ADDONLANG[ 'ActivatedError' ] = 'There was error during user activation: ';
-$_ADDONLANG[ 'MapedSuccessfully' ] = 'User was mapped successfully';
+$_ADDONLANG[ 'MapedSuccessfully' ] = 'The service was mapped successfully';
 $_ADDONLANG[ 'MapedError' ] = 'There was error during user\'s maping: ';
-$_ADDONLANG[ 'MapedErrorExists' ] = 'user was already mapped';
-$_ADDONLANG[ 'UnmapedSuccessfully' ] = 'User was unmapped successfully';
+$_ADDONLANG[ 'MapedErrorExists' ] = 'The service was already mapped';
+$_ADDONLANG[ 'UnmapedSuccessfully' ] = 'The service was unmapped successfully';
 $_ADDONLANG[ 'UnmapedError' ] = 'There was error during user\'s unmaping: ';
 $_ADDONLANG[ 'DataSyncedSuccessfully' ] = 'Data was synced successfully';
 $_ADDONLANG[ 'DataSyncedError' ] = 'There was error during data synchronization: ';
@@ -60,6 +60,11 @@ $_ADDONLANG[ 'AuthSyncedSuccessfully' ] = 'Login and Password are now identical'
 $_ADDONLANG[ 'AuthSyncedError' ] = 'There was error during authentication synchronization: ';
 $_ADDONLANG[ 'BlockOpsSuccessfully' ] = 'Operations were performed successfully';
 $_ADDONLANG[ 'BlockOpsError' ] = 'There were some errors during performing operations';
+$_ADDONLANG[ 'BlockListOfWHMCSUsers' ] = 'This is the list of WHMCS users which are maped to onapp users on the current server. Click "view" link to see the list of WHMCS products/services of this user for current server.';
+$_ADDONLANG[ 'BlockListOfWHMCSProducts' ] = 'This is the list of WHMCS products/services ( only unmapped products/services, once you map them they will not be in this list anymore ) for current user on the server - <b>%s | %s</b>';
+$_ADDONLANG[ 'BlockMapVM' ] = 
+'The first frame contains WHMCS User details. The second frame shows  details of the WHMCS product/service you are about to map to one of OnApp VMs by clicking "map" / "map anyway" link. Next is the list of this user\'s OnApp VMs available for mapping on the server <b>%s | %s</b> ';
+
 $_ADDONLANG[ 'ID' ] = 'ID';
 
 // JavaScript
